@@ -2,39 +2,159 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>交互式3D太阳系</title>
+  <title>3D 太阳系模型</title>
   <style>
-    body { margin: 0; overflow: hidden; background: black; }
-    canvas { display: block; }
+    body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+    #ui {
+      position: absolute; top: 20px; left: 20px;
+      background: rgba(0,0,0,0.6); color: white;
+      padding: 12px; border-radius: 8px;
+      font-size: 14px;
+    }
+    #planetInfo {
+      position: absolute; top: 20px; right: 20px;
+      background: rgba(0,0,0,0.7); color: white;
+      padding: 16px; border-radius: 12px;
+      width: 260px; display: none;
+    }
+    #planetInfo h2 { margin: 0 0 10px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <!-- 控制UI -->
+  <div id="ui">
+    <button onclick="setView('top')">全景俯瞰</button>
+    <button onclick="setView('side')">侧视</button>
+    <button onclick="setView('solar')">太阳系仪</button>
+    <br><br>
+    <label>速度控制:</label>
+    <input id="speedSlider" type="range" min="0.1" max="10" step="0.1" value="1">
+  </div>
 
-    /* 信息面板 */
-    #infoBox {
-      position: absolute;
-      top: 80px;
-      left: 20px;
-      background: rgba(0,0,0,0.65);
-      color: white;
-      padding: 12px;
-      border-radius: 12px;
-      font-family: "Segoe UI", sans-serif;
-      max-width: 300px;
-      display: none;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      line-height: 1.5;
+  <!-- 行星信息卡片 -->
+  <div id="planetInfo"></div>
+
+  <!-- Three.js 和 OrbitControls -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+  <script>
+    let scene, camera, renderer, controls;
+    let planets = [];
+    let planetData = {};
+    let speedFactor = 1;
+
+    init();
+    animate();
+
+    function init() {
+      // 场景
+      scene = new THREE.Scene();
+
+      // 摄像机
+      camera = new THREE.PerspectiveCamera(
+        60, window.innerWidth / window.innerHeight, 0.1, 5000
+      );
+      camera.position.set(0, 400, 900);
+
+      // 渲染器
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // 控制器
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+      // 光源
+      const light = new THREE.PointLight(0xffffff, 2, 0);
+      light.position.set(0, 0, 0);
+      scene.add(light);
+
+      // 星空背景
+      const stars = new THREE.Mesh(
+        new THREE.SphereGeometry(3000, 32, 32),
+        new THREE.MeshBasicMaterial({
+          map: new THREE.TextureLoader().load(
+            "https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/textures/galaxy_starfield.png"
+          ),
+          side: THREE.BackSide
+        })
+      );
+      scene.add(stars);
+
+      // 太阳
+      const sun = new THREE.Mesh(
+        new THREE.SphereGeometry(50, 32, 32),
+        new THREE.MeshBasicMaterial({ color: 0xFFFF00 })
+      );
+      scene.add(sun);
+
+      // 行星数据
+      planetData = {
+        mercury: { name:"水星", en:"Mercury", size:5, distance:80, speed:0.02, color:0xaaaaaa },
+        venus:   { name:"金星", en:"Venus", size:12, distance:120, speed:0.015, color:0xffcc66 },
+        earth:   { name:"地球", en:"Earth", size:13, distance:160, speed:0.01, color:0x3366ff },
+        mars:    { name:"火星", en:"Mars", size:7, distance:200, speed:0.008, color:0xff3300 },
+        jupiter: { name:"木星", en:"Jupiter", size:30, distance:260, speed:0.006, color:0xff9966 },
+        saturn:  { name:"土星", en:"Saturn", size:25, distance:320, speed:0.005, color:0xffcc99 },
+        uranus:  { name:"天王星", en:"Uranus", size:20, distance:380, speed:0.004, color:0x66ccff },
+        neptune: { name:"海王星", en:"Neptune", size:20, distance:440, speed:0.003, color:0x3333ff }
+      };
+
+      // 添加行星和轨道
+      const loader = new THREE.TextureLoader();
+      for (let key in planetData) {
+        const p = planetData[key];
+
+        let planet = new THREE.Mesh(
+          new THREE.SphereGeometry(p.size, 32, 32),
+          new THREE.MeshStandardMaterial({ color: p.color })
+        );
+        planet.userData = p;
+        scene.add(planet);
+
+        let orbit = new THREE.LineLoop(
+          new THREE.BufferGeometry().setFromPoints(
+            new THREE.Path().absellipse(0,0,p.distance,p.distance,0,Math.PI*2).getPoints(100)
+          ),
+          new THREE.LineBasicMaterial({ color: 0x888888 })
+        );
+        orbit.rotation.x = Math.PI/2;
+        scene.add(orbit);
+
+        planets.push({ mesh: planet, angle: Math.random()*Math.PI*2, data:p });
+      }
+
+      // 点击交互
+      window.addEventListener("click", onClick);
+
+      // 速度滑块
+      document.getElementById("speedSlider").addEventListener("input", (e)=>{
+        speedFactor = parseFloat(e.target.value);
+      });
+
+      window.addEventListener("resize", onWindowResize);
     }
 
-    /* 控制面板 */
-    #uiPanel {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(30,30,30,0.8);
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-family: "Segoe UI", sans-serif;
-      color: #fff;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.6);
+    function animate() {
+      requestAnimationFrame(animate);
+
+      planets.forEach(p=>{
+        p.angle += p.data.speed * speedFactor;
+        p.mesh.position.set(
+          p.data.distance * Math.cos(p.angle),
+          0,
+          p.data.distance * Math.sin(p.angle)
+        );
+      });
+
+      controls.update();
+      renderer.render(scene, camera);
     }
+
+    function setView(mode){
+      if(mode==="top") camera.position.set(0,800,0);
+      if(mode==="side") camera.position.set(800,0,0);
+      if(mode==="solar") camera.position.    }
     #uiPanel h3 {
       margin: 0 0 10px 0;
       font-size: 16px;
