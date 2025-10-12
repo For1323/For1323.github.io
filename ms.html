@@ -1,235 +1,378 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI星际拓荒：火星水循环AI管理系统设计</title>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f9fafb;
-      color: #222;
-      display: flex;
-      line-height: 1.6;
+    :root {
+      --primary: #ff6b35;
+      --secondary: #00d9ff;
+      --accent: #00ff88;
+      --bg-dark: #0a0e1a;
+      --bg-card: #141b2d;
+      --text-light: #e0e6ed;
+      --text-dim: #8892a6;
+      --border: #1e2a40;
+      --radius: 14px;
     }
-
-    /* 左侧目录栏 */
-    nav {
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-light);
+      line-height: 1.8;
+      scroll-behavior: smooth;
+      position: relative;
+    }
+    
+    /* 背景视频 */
+    .bg-video {
       position: fixed;
       top: 0;
       left: 0;
-      width: 240px;
-      height: 100vh;
-      background-color: #fff;
-      box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
-      padding: 30px 20px;
-      overflow-y: auto;
-      z-index: 1000;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.08;
+      z-index: 0;
+      filter: blur(2px);
     }
-
-    nav h2 {
-      font-size: 1.2em;
-      color: #111;
-      margin-bottom: 15px;
-      border-bottom: 2px solid #e5e7eb;
-      padding-bottom: 8px;
+    
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
     }
-
-    nav a {
-      display: block;
-      color: #444;
-      text-decoration: none;
-      margin: 8px 0;
-      font-size: 0.95em;
-      transition: color 0.2s;
+    
+    header {
+      background: linear-gradient(135deg, rgba(255,107,53,0.9), rgba(197,34,31,0.9));
+      color: #fff;
+      text-align: center;
+      padding: 70px 20px;
+      box-shadow: 0 8px 32px rgba(255,107,53,0.3);
+      border-bottom-left-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
     }
-
-    nav a:hover {
-      color: #0078ff;
+    header::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(0,217,255,0.2), transparent 60%);
+      pointer-events: none;
     }
-
-    /* 主体内容区域 */
-    main {
-      margin-left: 260px;
-      padding: 40px 60px;
-      max-width: 900px;
+    header h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      position: relative;
+      z-index: 1;
     }
-
-    h1 {
-      font-size: 2em;
-      color: #111;
-      border-bottom: 3px solid #0078ff;
-      padding-bottom: 10px;
-      margin-bottom: 30px;
+    header p {
+      font-size: 1.15em;
+      opacity: 0.95;
+      position: relative;
+      z-index: 1;
     }
-
-    h2 {
-      font-size: 1.4em;
-      color: #0078ff;
-      margin-top: 40px;
-      border-left: 4px solid #0078ff;
-      padding-left: 10px;
-    }
-
-    h3 {
-      font-size: 1.2em;
-      margin-top: 25px;
-      color: #333;
-    }
-
+    
     section {
-      background-color: #fff;
-      padding: 25px 30px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      margin-bottom: 35px;
+      background: linear-gradient(145deg, var(--bg-card), rgba(30,42,64,0.8));
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+      margin: 40px auto;
+      padding: 40px;
+      width: 90%;
+      max-width: 950px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
     }
-
+    section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 32px rgba(255,107,53,0.3);
+      border-color: rgba(255,107,53,0.3);
+    }
+    
+    h2 {
+      border-left: 6px solid var(--primary);
+      padding-left: 15px;
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.6em;
+      text-shadow: 0 0 10px rgba(255,107,53,0.3);
+    }
+    h3 {
+      color: var(--secondary);
+      margin-top: 24px;
+      margin-bottom: 12px;
+      font-size: 1.3em;
+    }
+    
+    p {
+      color: var(--text-light);
+      margin: 15px 0;
+    }
+    
+    ul {
+      padding-left: 25px;
+    }
+    ul li {
+      margin: 10px 0;
+      color: var(--text-light);
+      position: relative;
+    }
+    ul li::marker {
+      color: var(--accent);
+    }
+    
+    strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 15px;
+      margin-top: 20px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.3);
     }
-
     th, td {
-      border: 1px solid #e5e7eb;
-      padding: 10px;
+      padding: 14px 12px;
       text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: linear-gradient(135deg, rgba(255,107,53,0.3), rgba(0,217,255,0.2));
+      color: var(--text-light);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.9em;
+      letter-spacing: 1px;
+    }
+    td {
+      background: rgba(20,27,45,0.5);
+      color: var(--text-light);
+    }
+    tr:hover td {
+      background: rgba(255,107,53,0.1);
+    }
+    
+    code, pre {
+      background: rgba(10,14,26,0.8);
+      border-radius: 10px;
+      padding: 15px 20px;
+      display: block;
+      overflow-x: auto;
+      border-left: 4px solid var(--accent);
+      color: var(--accent);
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 0.95em;
+      line-height: 1.6;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+    }
+    
+    /* 视频展示区 */
+    .video-section {
+      position: relative;
+      padding: 60px 40px;
+      background: linear-gradient(145deg, rgba(20,27,45,0.9), rgba(10,14,26,0.9));
+      border: 2px solid var(--primary);
+    }
+    .video-section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(255,107,53,0.5);
+      border: 2px solid var(--primary);
+    }
+    .video-container video {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: brightness(1.1) contrast(1.1);
+    }
+    .video-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(10,14,26,0.9));
+      padding: 20px;
+      text-align: center;
+      color: var(--text-light);
       font-size: 0.95em;
     }
-
-    th {
-      background-color: #f3f4f6;
+    
+    footer {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-dim);
+      margin: 60px 0 30px;
+      padding: 20px;
+      border-top: 1px solid var(--border);
     }
-
-    /* 平滑滚动 */
-    html {
-      scroll-behavior: smooth;
+    
+    /* 返回顶部按钮 */
+    .nav-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, var(--primary), #c5221f);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255,107,53,0.5);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
-    /* 响应式：小屏时隐藏目录 */
-    @media (max-width: 768px) {
-      nav {
-        display: none;
-      }
-      main {
-        margin-left: 0;
-        padding: 20px;
-      }
+    .nav-btn:hover {
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      transform: translateY(-5px);
+      box-shadow: 0 6px 30px rgba(0,217,255,0.6);
+    }
+    
+    /* 滚动条样式 */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
     }
   </style>
 </head>
 <body>
-  <nav>
-    <h2>目录导航</h2>
-    <a href="#intro">项目背景与核心挑战</a>
-    <a href="#water-sources">水源方案与AI优化</a>
-    <a href="#recycle">水循环闭环设计</a>
-    <a href="#collaboration">跨组协作与效率优化</a>
-    <a href="#logic">AI控制逻辑</a>
-    <a href="#summary">成果总结与展望</a>
-  </nav>
+  <!-- 背景循环视频 -->
+  <video class="bg-video" autoplay loop muted playsinline>
+    <source src="mars.mp4" type="video/mp4">
+  </video>
 
-  <main>
-    <h1>AI星际拓荒：火星水循环AI管理系统设计</h1>
+  <div class="content-wrapper">
+    <header>
+      <h1>AI星际拓荒：火星水循环AI管理系统设计</h1>
+      <p>AI助力火星移民的可持续水资源蓝图</p>
+    </header>
 
-    <section id="intro">
+    <section>
       <h2>一、项目背景与核心挑战</h2>
-      <p>在火星上，液态水几乎不存在，人类移民面临严重的水资源短缺问题。为了满足 <b>100人日均15吨水</b> 的需求（包括生活与农业用水），我们必须通过“当地原位取水 + 废水全回收”的双路径模式实现水循环闭环。</p>
+      <p>火星几乎没有液态水资源。为了满足 <strong>100人日均15吨水</strong> 的生活与农业需求，本方案采用"<strong>原位取水 + 废水回收</strong>"双路径，实现闭环水循环。</p>
       <ul>
-        <li>火星大气稀薄，液态水难以直接获取；</li>
-        <li>融冰与大气集水能耗高、效率不稳定；</li>
-        <li>废水回收需在低重力、低温环境下实现高纯度净化；</li>
-        <li>必须由AI动态平衡取水、能耗与回收率，保证持续供水。</li>
+        <li>火星大气稀薄、融冰能耗高；</li>
+        <li>需在低重力、低温下实现高效净化；</li>
+        <li>AI需平衡能耗、产水量与回收率。</li>
       </ul>
     </section>
 
-    <section id="water-sources">
+    <section>
       <h2>二、水源方案设计与AI优化思路</h2>
-      <h3>（1）选取的火星取水技术</h3>
-      <p>参考NASA与SpaceX的火星任务方案，选择以下两种原位取水方式：</p>
+      <h3>（1）火星取水技术选择</h3>
       <ul>
-        <li><b>融冰取水（冰层提取）</b>：通过加热装置融化火星地下冰，获得液态水；</li>
-        <li><b>大气水收集（冷凝法）</b>：利用昼夜温差冷凝火星大气中的水蒸气。</li>
+        <li><strong>融冰取水</strong>：加热融化火星地下冰层，获得液态水。</li>
+        <li><strong>大气冷凝取水</strong>：利用昼夜温差冷凝水蒸气。</li>
       </ul>
+
       <h3>（2）AI优化策略</h3>
-      <p>AI系统通过对温度、气压、能耗与用水需求的实时分析，动态调控取水节奏：</p>
       <ul>
-        <li>白天：气温高、电力充足 → 启动冷凝系统；</li>
-        <li>夜间：利用低谷电力运行融冰加热器；</li>
-        <li>AI预测模型：基于气候数据预测取水量并调整储水策略；</li>
-        <li>能耗-水量优化算法：实现单位能耗产水量最大化。</li>
+        <li>白天：气温高、电力充足 → 优先运行冷凝系统；</li>
+        <li>夜间：利用低谷电力 → 启动融冰加热器储水；</li>
+        <li>预测模型调整储水与能耗比例，实现动态平衡。</li>
       </ul>
     </section>
 
-    <section id="recycle">
+    <!-- 视频展示区 -->
+    <section class="video-section">
+      <h2>🎬 火星水循环系统演示</h2>
+      <div class="video-container">
+        <video controls>
+          <source src="mars.mp4" type="video/mp4">
+          您的浏览器不支持视频播放。
+        </video>
+        <div class="video-overlay">
+          火星基地水循环系统运行实况
+        </div>
+      </div>
+    </section>
+
+    <section>
       <h2>三、水循环闭环构建与AI调控系统</h2>
-      <h3>（1）总体流程</h3>
-      <pre>火星冰层/大气 →（AI调度）→ 原位取水 → 纯化储存 → 生活/农业/设备用水 → 废水收集 → 多级净化 → 再利用（AI分配）→ 闭环</pre>
+      <pre><code>火星冰层/大气 → (AI调度) → 原位取水 → 纯化储存 → 生活/农业/设备用水 →
+废水收集 → 多级净化(过滤+膜分离+紫外消毒) → 再利用(AI分配) → 闭环</code></pre>
 
-      <h3>（2）净化与再利用技术</h3>
-      <ul>
-        <li>机械过滤：去除固体杂质；</li>
-        <li>反渗透膜分离：去除盐类与微生物；</li>
-        <li>紫外线+纳米银离子消毒：确保饮用安全；</li>
-        <li>多级分类储水：纯净水与回收水分区存储。</li>
-      </ul>
-
-      <h3>（3）AI动态分配逻辑</h3>
+      <h3>（2）AI动态分配逻辑</h3>
       <table>
         <tr><th>用水类型</th><th>优先级</th><th>来源</th><th>回收比例</th><th>AI监控变量</th></tr>
-        <tr><td>饮用水</td><td>★★★★★</td><td>融冰水+纯化回收水</td><td>95%</td><td>水质、余量</td></tr>
-        <tr><td>农业灌溉</td><td>★★★★</td><td>回收水</td><td>80%</td><td>土壤湿度、植物需水量</td></tr>
+        <tr><td>饮用水</td><td>★★★★★</td><td>融冰 + 纯化水</td><td>95%</td><td>水质、余量</td></tr>
+        <tr><td>农业灌溉</td><td>★★★★</td><td>回收水</td><td>80%</td><td>湿度、作物需求</td></tr>
         <tr><td>设备冷却</td><td>★★★</td><td>废水再利用</td><td>70%</td><td>温度、能耗</td></tr>
       </table>
     </section>
 
-    <section id="collaboration">
+    <section>
       <h2>四、跨组协作与效率优化</h2>
-      <h3>（1）联动能源舱</h3>
-      <p>监控取水设备能耗：</p>
       <ul>
-        <li>大气集水器约 0.8 kWh/L</li>
-        <li>融冰装置约 1.5 kWh/L</li>
-      </ul>
-      <p>AI平衡策略：</p>
-      <ul>
-        <li>白天 → 光伏发电高峰 → 增加大气取水</li>
-        <li>夜间 → 电力需求低 → 运行融冰系统</li>
-      </ul>
-
-      <h3>（2）联动实验室舱</h3>
-      <ul>
-        <li>监测取水效率与废水回收率；</li>
-        <li>AI优化控制策略，目标总水资源利用率 ≥ 85%。</li>
-      </ul>
-
-      <h3>（3）应急策略</h3>
-      <p>若火星冬季大气取水不足，AI将：</p>
-      <ul>
-        <li>提高废水净化频率；</li>
-        <li>调整生活/灌溉用水比例；</li>
-        <li>启用储水系统维持供给。</li>
+        <li>大气集水器能耗：<strong>0.8 kWh/L</strong>；融冰装置：<strong>1.5 kWh/L</strong>；</li>
+        <li>AI在高峰电力时段调节取水节奏，昼取夜融；</li>
+        <li>实时调整能耗与产水匹配，目标 <strong>水利用率 ≥ 85%</strong>。</li>
       </ul>
     </section>
 
-    <section id="logic">
-      <h2>五、AI控制核心逻辑简图</h2>
-      <pre>传感器监测 → AI分析预测 → 优化调度 → 设备执行 → 数据反馈 → 持续学习优化</pre>
+    <section>
+      <h2>五、AI控制核心逻辑</h2>
+      <pre><code>传感器监测(水量/温度/能耗)
+     ↓
+AI数据分析与预测
+     ↓
+智能调度(取水+净化+分配)
+     ↓
+执行与反馈 → 模型自学习优化</code></pre>
     </section>
 
-    <section id="summary">
+    <section>
       <h2>六、成果总结与展望</h2>
-      <p>本AI水循环系统通过“取水—使用—回收—再利用”的闭环结构，实现了火星移民的自给自足用水方案。</p>
+      <p>AI水循环系统通过闭环设计，实现火星殖民地的自给自足用水管理：</p>
       <ul>
-        <li>智能预测与能耗平衡；</li>
-        <li>动态优先级分配；</li>
-        <li>资源利用率可达85%以上；</li>
-        <li>可与能源、环境模块协同扩展。</li>
+        <li>能耗预测与调控；</li>
+        <li>用水优先级管理；</li>
+        <li>资源利用率超过85%；</li>
+        <li>具备未来自适应与跨基地调度潜力。</li>
       </ul>
-      <p>未来可引入自适应学习算法，实现季节变化自动调节与跨殖民点调度，迈向火星生态自治系统。</p>
     </section>
-  </main>
+
+    <footer>
+      <p>© 2025 AI星际拓荒项目学习 | 火星水循环AI管理小组</p>
+    </footer>
+
+    <button class="nav-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
+  </div>
 </body>
 </html>
