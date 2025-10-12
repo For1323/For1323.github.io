@@ -1,193 +1,235 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI星际拓荒：火星水循环AI管理系统设计</title>
   <style>
     body {
-      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-      background-color: #f5f7fa;
-      color: #333;
-      line-height: 1.7;
       margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f9fafb;
+      color: #222;
+      display: flex;
+      line-height: 1.6;
     }
-    header {
-      background: linear-gradient(135deg, #002b5b, #004b7c);
-      color: #fff;
-      text-align: center;
-      padding: 40px 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-    header h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-    header p {
-      font-size: 16px;
-      opacity: 0.9;
-    }
-    section {
+
+    /* 左侧目录栏 */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 100vh;
       background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      margin: 30px auto;
-      padding: 30px;
-      width: 90%;
+      box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
+      padding: 30px 20px;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    nav h2 {
+      font-size: 1.2em;
+      color: #111;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 8px;
+    }
+
+    nav a {
+      display: block;
+      color: #444;
+      text-decoration: none;
+      margin: 8px 0;
+      font-size: 0.95em;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #0078ff;
+    }
+
+    /* 主体内容区域 */
+    main {
+      margin-left: 260px;
+      padding: 40px 60px;
       max-width: 900px;
     }
+
+    h1 {
+      font-size: 2em;
+      color: #111;
+      border-bottom: 3px solid #0078ff;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
     h2 {
-      border-left: 6px solid #0077cc;
+      font-size: 1.4em;
+      color: #0078ff;
+      margin-top: 40px;
+      border-left: 4px solid #0078ff;
       padding-left: 10px;
-      color: #004b7c;
-      margin-top: 10px;
     }
+
     h3 {
-      color: #005fa3;
-      margin-top: 20px;
+      font-size: 1.2em;
+      margin-top: 25px;
+      color: #333;
     }
+
+    section {
+      background-color: #fff;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      margin-bottom: 35px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 15px;
+      margin-top: 15px;
     }
-    table, th, td {
-      border: 1px solid #ccc;
-    }
+
     th, td {
+      border: 1px solid #e5e7eb;
       padding: 10px;
       text-align: center;
+      font-size: 0.95em;
     }
+
     th {
-      background-color: #eaf3ff;
+      background-color: #f3f4f6;
     }
-    code {
-      background: #f3f3f3;
-      padding: 2px 5px;
-      border-radius: 4px;
-      font-family: Consolas, monospace;
-      color: #004b7c;
+
+    /* 平滑滚动 */
+    html {
+      scroll-behavior: smooth;
     }
-    footer {
-      text-align: center;
-      font-size: 14px;
-      color: #777;
-      margin: 40px 0 20px;
+
+    /* 响应式：小屏时隐藏目录 */
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+      }
+      main {
+        margin-left: 0;
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
+  <nav>
+    <h2>目录导航</h2>
+    <a href="#intro">项目背景与核心挑战</a>
+    <a href="#water-sources">水源方案与AI优化</a>
+    <a href="#recycle">水循环闭环设计</a>
+    <a href="#collaboration">跨组协作与效率优化</a>
+    <a href="#logic">AI控制逻辑</a>
+    <a href="#summary">成果总结与展望</a>
+  </nav>
+
+  <main>
     <h1>AI星际拓荒：火星水循环AI管理系统设计</h1>
-    <p>AI助力火星移民可持续水资源方案</p>
-  </header>
 
-  <section>
-    <h2>一、项目背景与核心挑战</h2>
-    <p>在火星上，液态水几乎不存在，人类移民面临严重的水资源短缺问题。为了满足 <strong>100人日均15吨水</strong> 的需求（包括生活与农业用水），我们必须通过“<strong>当地原位取水 + 废水全回收</strong>”的双路径模式实现水循环闭环。</p>
-    <ul>
-      <li>火星大气稀薄，液态水难以直接获取；</li>
-      <li>融冰与大气集水能耗高、效率不稳定；</li>
-      <li>废水回收需在低重力、低温环境下实现高纯度净化；</li>
-      <li>AI需动态平衡取水、能耗与回收率，保证持续供水。</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>二、水源方案设计与AI优化思路</h2>
-    <h3>（1）火星取水技术选择</h3>
-    <ul>
-      <li><strong>融冰取水（冰层提取）</strong>：通过加热装置融化火星地下冰，获得液态水。</li>
-      <li><strong>大气水收集（冷凝法）</strong>：利用昼夜温差冷凝火星大气中的水蒸气。</li>
-    </ul>
-
-    <h3>（2）AI优化策略</h3>
-    <p>AI系统通过对温度、气压、能耗与用水需求的实时分析，动态调控取水节奏：</p>
-    <ul>
-      <li>白天：气温高、电力充足 → 启动冷凝系统，提升大气取水效率；</li>
-      <li>夜间：利用低谷电力运行融冰加热器进行储水；</li>
-      <li>AI预测模型：根据历史气候数据预测次日取水量，调整储水与能耗分配；</li>
-      <li>能耗-水量优化算法：通过多变量分析实现“单位能耗产水量最大化”。</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>三、水循环闭环构建与AI调控系统</h2>
-    <h3>（1）总体流程</h3>
-    <pre><code>火星冰层/大气 →（AI调度）→ 原位取水 → 纯化储存 → 生活/农业/设备用水 → 
-废水收集 → 多级净化（过滤+膜分离+紫外消毒） → 再利用（AI分配）→ 闭环</code></pre>
-
-    <h3>（2）净化与再利用技术</h3>
-    <ul>
-      <li>机械过滤：去除固体杂质；</li>
-      <li>反渗透膜分离：去除盐类与微生物；</li>
-      <li>紫外线 + 纳米银离子消毒：确保饮用安全；</li>
-      <li>多级分类储水：纯净水与回收水分区存储。</li>
-    </ul>
-
-    <h3>（3）AI动态分配逻辑</h3>
-    <table>
-      <tr><th>用水类型</th><th>优先级</th><th>来源</th><th>回收比例</th><th>AI监控变量</th></tr>
-      <tr><td>饮用水</td><td>★★★★★</td><td>融冰水 + 纯化回收水</td><td>95%</td><td>水质、余量</td></tr>
-      <tr><td>农业灌溉</td><td>★★★★</td><td>回收水</td><td>80%</td><td>土壤湿度、植物需水量</td></tr>
-      <tr><td>设备冷却</td><td>★★★</td><td>废水再利用</td><td>70%</td><td>温度、能耗</td></tr>
-    </table>
-  </section>
-
-  <section>
-    <h2>四、跨组协作与效率优化</h2>
-    <h3>（1）联动能源舱</h3>
-    <ul>
-      <li>大气集水器约 <strong>0.8 kWh/L</strong></li>
-      <li>融冰装置约 <strong>1.5 kWh/L</strong></li>
-      <li>AI自动在“水需求”和“供电高峰”间平衡：</li>
+    <section id="intro">
+      <h2>一、项目背景与核心挑战</h2>
+      <p>在火星上，液态水几乎不存在，人类移民面临严重的水资源短缺问题。为了满足 <b>100人日均15吨水</b> 的需求（包括生活与农业用水），我们必须通过“当地原位取水 + 废水全回收”的双路径模式实现水循环闭环。</p>
       <ul>
-        <li>白天 → 光伏发电高峰 → 增加大气取水；</li>
-        <li>夜间 → 电力需求低 → 运行融冰系统。</li>
+        <li>火星大气稀薄，液态水难以直接获取；</li>
+        <li>融冰与大气集水能耗高、效率不稳定；</li>
+        <li>废水回收需在低重力、低温环境下实现高纯度净化；</li>
+        <li>必须由AI动态平衡取水、能耗与回收率，保证持续供水。</li>
       </ul>
-    </ul>
+    </section>
 
-    <h3>（2）联动实验室舱</h3>
-    <p>实验舱反馈取水效率与废水回收率，AI优化控制策略，目标：</p>
-    <p><strong>总水资源利用率 ≥ 85%</strong></p>
+    <section id="water-sources">
+      <h2>二、水源方案设计与AI优化思路</h2>
+      <h3>（1）选取的火星取水技术</h3>
+      <p>参考NASA与SpaceX的火星任务方案，选择以下两种原位取水方式：</p>
+      <ul>
+        <li><b>融冰取水（冰层提取）</b>：通过加热装置融化火星地下冰，获得液态水；</li>
+        <li><b>大气水收集（冷凝法）</b>：利用昼夜温差冷凝火星大气中的水蒸气。</li>
+      </ul>
+      <h3>（2）AI优化策略</h3>
+      <p>AI系统通过对温度、气压、能耗与用水需求的实时分析，动态调控取水节奏：</p>
+      <ul>
+        <li>白天：气温高、电力充足 → 启动冷凝系统；</li>
+        <li>夜间：利用低谷电力运行融冰加热器；</li>
+        <li>AI预测模型：基于气候数据预测取水量并调整储水策略；</li>
+        <li>能耗-水量优化算法：实现单位能耗产水量最大化。</li>
+      </ul>
+    </section>
 
-    <h3>（3）应急策略</h3>
-    <ul>
-      <li>当冬季低温导致取水效率下降时，AI提高废水净化频率；</li>
-      <li>临时调整生活与灌溉用水比例；</li>
-      <li>启用备用储水系统确保稳定供给。</li>
-    </ul>
-  </section>
+    <section id="recycle">
+      <h2>三、水循环闭环构建与AI调控系统</h2>
+      <h3>（1）总体流程</h3>
+      <pre>火星冰层/大气 →（AI调度）→ 原位取水 → 纯化储存 → 生活/农业/设备用水 → 废水收集 → 多级净化 → 再利用（AI分配）→ 闭环</pre>
 
-  <section>
-    <h2>五、AI控制核心逻辑</h2>
-    <pre><code>传感器监测（温度/湿度/水量/能耗）
-       ↓
-AI数据中心分析与预测
-       ↓
-优化调度（取水时间 + 净化流程 + 能耗分配）
-       ↓
-输出控制信号 → 各设备执行
-       ↓
-实时反馈与模型更新 → 持续学习优化</code></pre>
-  </section>
+      <h3>（2）净化与再利用技术</h3>
+      <ul>
+        <li>机械过滤：去除固体杂质；</li>
+        <li>反渗透膜分离：去除盐类与微生物；</li>
+        <li>紫外线+纳米银离子消毒：确保饮用安全；</li>
+        <li>多级分类储水：纯净水与回收水分区存储。</li>
+      </ul>
 
-  <section>
-    <h2>六、成果总结与展望</h2>
-    <p>本AI水循环系统通过“取水—使用—回收—再利用”的闭环结构，实现了火星移民的自给自足用水方案。</p>
-    <ul>
-      <li>智能预测与能耗平衡；</li>
-      <li>动态优先级分配；</li>
-      <li>资源利用率可提升至 <strong>85%以上</strong>；</li>
-      <li>可与能源、环境控制模块协同扩展。</li>
-    </ul>
-    <p><strong>未来展望：</strong> AI系统可进一步引入自适应学习算法，根据火星季节变化自动调整参数，甚至实现跨殖民点间水资源调度，成为“火星生态自治系统”的基础模块。</p>
-  </section>
+      <h3>（3）AI动态分配逻辑</h3>
+      <table>
+        <tr><th>用水类型</th><th>优先级</th><th>来源</th><th>回收比例</th><th>AI监控变量</th></tr>
+        <tr><td>饮用水</td><td>★★★★★</td><td>融冰水+纯化回收水</td><td>95%</td><td>水质、余量</td></tr>
+        <tr><td>农业灌溉</td><td>★★★★</td><td>回收水</td><td>80%</td><td>土壤湿度、植物需水量</td></tr>
+        <tr><td>设备冷却</td><td>★★★</td><td>废水再利用</td><td>70%</td><td>温度、能耗</td></tr>
+      </table>
+    </section>
 
-  <footer>
-    <p>© 2025 AI星际拓荒项目学习 | 火星水循环AI管理小组</p>
-  </footer>
+    <section id="collaboration">
+      <h2>四、跨组协作与效率优化</h2>
+      <h3>（1）联动能源舱</h3>
+      <p>监控取水设备能耗：</p>
+      <ul>
+        <li>大气集水器约 0.8 kWh/L</li>
+        <li>融冰装置约 1.5 kWh/L</li>
+      </ul>
+      <p>AI平衡策略：</p>
+      <ul>
+        <li>白天 → 光伏发电高峰 → 增加大气取水</li>
+        <li>夜间 → 电力需求低 → 运行融冰系统</li>
+      </ul>
+
+      <h3>（2）联动实验室舱</h3>
+      <ul>
+        <li>监测取水效率与废水回收率；</li>
+        <li>AI优化控制策略，目标总水资源利用率 ≥ 85%。</li>
+      </ul>
+
+      <h3>（3）应急策略</h3>
+      <p>若火星冬季大气取水不足，AI将：</p>
+      <ul>
+        <li>提高废水净化频率；</li>
+        <li>调整生活/灌溉用水比例；</li>
+        <li>启用储水系统维持供给。</li>
+      </ul>
+    </section>
+
+    <section id="logic">
+      <h2>五、AI控制核心逻辑简图</h2>
+      <pre>传感器监测 → AI分析预测 → 优化调度 → 设备执行 → 数据反馈 → 持续学习优化</pre>
+    </section>
+
+    <section id="summary">
+      <h2>六、成果总结与展望</h2>
+      <p>本AI水循环系统通过“取水—使用—回收—再利用”的闭环结构，实现了火星移民的自给自足用水方案。</p>
+      <ul>
+        <li>智能预测与能耗平衡；</li>
+        <li>动态优先级分配；</li>
+        <li>资源利用率可达85%以上；</li>
+        <li>可与能源、环境模块协同扩展。</li>
+      </ul>
+      <p>未来可引入自适应学习算法，实现季节变化自动调节与跨殖民点调度，迈向火星生态自治系统。</p>
+    </section>
+  </main>
 </body>
 </html>
