@@ -30,7 +30,6 @@
       position: relative;
     }
     
-    /* 背景视频 */
     .bg-video {
       position: fixed;
       top: 0;
@@ -115,6 +114,12 @@
       margin-bottom: 12px;
       font-size: 1.3em;
     }
+    h4 {
+      color: var(--accent);
+      margin-top: 18px;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
     
     p {
       color: var(--text-light);
@@ -136,6 +141,14 @@
     strong {
       color: var(--accent);
       font-weight: 600;
+    }
+    
+    .highlight-box {
+      background: rgba(255,107,53,0.1);
+      border-left: 4px solid var(--primary);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
     }
     
     table {
@@ -181,7 +194,6 @@
       box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
     }
     
-    /* 视频展示区 */
     .video-section {
       position: relative;
       padding: 60px 40px;
@@ -216,7 +228,6 @@
       font-size: 0.9em;
     }
     
-    /* 侧边目录 */
     .side-nav {
       position: fixed;
       left: 20px;
@@ -275,11 +286,32 @@
       border-left-color: var(--accent);
     }
     
-    /* 响应式：小屏幕隐藏侧边栏 */
-    @media (max-width: 1200px) {
-      .side-nav {
-        display: none;
-      }
+    .references {
+      background: rgba(10,14,26,0.6);
+      padding: 30px;
+      border-radius: var(--radius);
+      margin-top: 30px;
+    }
+    .references h3 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .references ol {
+      padding-left: 25px;
+    }
+    .references li {
+      margin: 12px 0;
+      line-height: 1.6;
+    }
+    .references a {
+      color: var(--secondary);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--secondary);
+      transition: all 0.3s ease;
+    }
+    .references a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
     }
     
     footer {
@@ -291,7 +323,6 @@
       border-top: 1px solid var(--border);
     }
     
-    /* 返回顶部按钮 */
     .nav-btn {
       position: fixed;
       bottom: 30px;
@@ -317,7 +348,12 @@
       box-shadow: 0 6px 30px rgba(0,217,255,0.6);
     }
     
-    /* 滚动条样式 */
+    @media (max-width: 1200px) {
+      .side-nav {
+        display: none;
+      }
+    }
+    
     ::-webkit-scrollbar {
       width: 10px;
     }
@@ -334,58 +370,129 @@
   </style>
 </head>
 <body>
-  <!-- 背景循环视频 -->
   <video class="bg-video" autoplay loop muted playsinline>
     <source src="mars.mp4" type="video/mp4">
   </video>
 
   <div class="content-wrapper">
-    <!-- 侧边目录 -->
     <nav class="side-nav">
       <h4>📑 目录导航</h4>
       <ul>
-        <li><a href="#section1">项目背景</a></li>
-        <li><a href="#section2">水源方案设计</a></li>
+        <li><a href="#section1">问题陈述</a></li>
+        <li><a href="#section2">AI解决方案</a></li>
         <li><a href="#section3">视频演示</a></li>
-        <li><a href="#section4">水循环闭环</a></li>
-        <li><a href="#section5">跨组协作</a></li>
-        <li><a href="#section6">AI控制逻辑</a></li>
-        <li><a href="#section7">成果展望</a></li>
+        <li><a href="#section4">功能舱集成</a></li>
+        <li><a href="#section5">数据传感系统</a></li>
+        <li><a href="#section6">预期效果</a></li>
+        <li><a href="#section7">备用方案</a></li>
+        <li><a href="#section8">参考文献</a></li>
       </ul>
     </nav>
 
     <header>
-      <h1>AI星际拓荒：火星水循环AI管理系统设计</h1>
-      <p>AI助力火星移民的可持续水资源蓝图</p>
+      <h1>AI星际拓荒：火星水循环AI管理系统</h1>
+      <p>水循环 AI 管理小组 (AI Water Management Team)</p>
     </header>
 
     <section id="section1">
-      <h2>一、项目背景与核心挑战</h2>
-      <p>火星几乎没有液态水资源。为了满足 <strong>100人日均15吨水</strong> 的生活与农业需求，本方案采用"<strong>原位取水 + 废水回收</strong>"双路径，实现闭环水循环。</p>
+      <h2>一、问题陈述</h2>
+      
+      <div class="highlight-box">
+        <h3>🔴 核心挑战</h3>
+        <p>火星环境极端干燥且能量受限。移民基地需在极端昼夜温差（可达几十到百余摄氏度）与稀薄大气下运行，且火星无稳定液态水。</p>
+      </div>
+
+      <p>为保障 <strong>100 人的生存与农业需求</strong>，我们需同时依赖"<strong>当地原位取水 + 全流程废水回收</strong>"双路径，并在能源受限条件下保证系统连续、可靠运行与水资源利用率 <strong>≥ 85%</strong>。</p>
+
+      <h3>具体问题（本小组专注点）</h3>
       <ul>
-        <li>火星大气稀薄、融冰能耗高；</li>
-        <li>需在低重力、低温下实现高效净化；</li>
-        <li>AI需平衡能耗、产水量与回收率。</li>
+        <li>如何通过 <strong>AI 智能调度</strong>控制取水设备（融冰与大气冷凝）</li>
+        <li>优化净化与再利用流程</li>
+        <li>与能源舱/实验舱协作，在能耗受约束情况下满足 <strong>日均 15 m³ 总需求</strong>（≈150 L/人/日）</li>
+        <li>保持系统自适应学习能力以应对季节、局部环境与设备退化等变化</li>
       </ul>
     </section>
 
     <section id="section2">
-      <h2>二、水源方案设计与AI优化思路</h2>
-      <h3>（1）火星取水技术选择</h3>
+      <h2>二、AI 解决方案（深入版）</h2>
+      
+      <h3>🎯 系统目标</h3>
+      <p>构建一个<strong>自感知—自学习—自优化</strong>的水循环控制系统（AI-WM），能在 24/7 环境下动态平衡取水、净化、储备与分配策略，最小化单位产水能耗并保证关键用水的 SLA（饮用水 100% 可用）。</p>
+
+      <h3>1）核心职责区（细化）</h3>
+      
+      <h4>主责：水处理舱（Water Processing Module）</h4>
       <ul>
-        <li><strong>融冰取水</strong>：加热融化火星地下冰层，获得液态水。</li>
-        <li><strong>大气冷凝取水</strong>：利用昼夜温差冷凝水蒸气。</li>
+        <li>负责原位取水（融冰、冷凝）、原水预处理</li>
+        <li>集中净化（膜/化学/紫外）</li>
+        <li>二次储存与回收循环逻辑执行</li>
+        <li>部署 <strong>AI-WM Core</strong>（学习与决策中枢）、数字孪生（Digital Twin）模拟环境</li>
       </ul>
 
-      <h3>（2）AI优化策略</h3>
+      <h4>协责：能源舱（Energy Management Module）</h4>
       <ul>
-        <li>白天：气温高、电力充足 → 优先运行冷凝系统；</li>
-        <li>夜间：利用低谷电力 → 启动融冰加热器储水；</li>
-        <li>预测模型调整储水与能耗比例，实现动态平衡。</li>
+        <li>提供电力供给预测（太阳能 + 储能 + 备用核电）</li>
+        <li>与 AI-WM 交换负载/优先级建议</li>
       </ul>
+
+      <h4>协责：农业舱 & 居住舱 & 实验舱</h4>
+      <ul>
+        <li>提供需水曲线、作物需水数据</li>
+        <li>用水实时反馈与水质检测样本给 AI 用于模型校准</li>
+      </ul>
+
+      <h3>2）AI 系统总体架构（模块与数据流）</h3>
+      <pre><code>传感器层 → 数据总线 → 数据清洗与存储 → 预测模型 (短/中/长期)
+     ↓
+优化引擎 (RL + MIP) → 下发执行策略 → 设备执行
+     ↓
+运行数据回传 → 在线学习与模型更新</code></pre>
+
+      <h3>关键子模块</h3>
+      
+      <h4>📊 数据采集层</h4>
+      <p>含流量计、压力传感、水质在线分析（pH、导电率、溶解氧、TOC）、温湿度与功率表；采样频率 0.2–1Hz 视变量而定。</p>
+
+      <h4>🔮 预测层</h4>
+      <ul>
+        <li><strong>架构</strong>：多变量 Transformer 或 LSTM（带气象/轨道参数输入）</li>
+        <li><strong>输入特征</strong>：局部温度、湿度、辐照强度、历史产水量、储罐水位、设备状态</li>
+        <li><strong>输出</strong>：24h/72h 分辨率的产水量预测、供电预测与需求预测</li>
+        <li><strong>训练数据</strong>：历史实验数据 + 数字孪生合成数据（在早期缺少真实数据时用仿真增补）</li>
+      </ul>
+
+      <h4>🎮 优化控制层</h4>
+      <p>基于<strong>强化学习（PPO 或 DDPG）</strong>与<strong>混合整数线性规划（MIP）</strong>的混合策略：</p>
+      <ul>
+        <li>RL 学习长期策略与自适应权重</li>
+        <li>MIP 做实时受约束最优分配</li>
+        <li><strong>目标函数</strong>：最小化总能耗 E、同时满足用水 SLA 与安全阈值</li>
+        <li><strong>奖励设计</strong>：主奖励基于 (饮用水满足率 × 1000) − α × 能耗 − β × 未满足灌溉量</li>
+      </ul>
+
+      <h4>⚠️ 异常检测与预测性维护</h4>
+      <p>深度自编码器（Autoencoder）或时序异常检测用于泵/膜性能退化、泄露或膜污染早期预警。</p>
+
+      <h4>🌐 数字孪生（仿真环境）</h4>
+      <p>用于离线训练 RL 策略与压力测试极端场景（冬季、能量短缺、设备故障）。</p>
+
+      <h3>3）自适应控制与学习</h3>
+      <ul>
+        <li>每 <strong>24 小时</strong>进行在线微调</li>
+        <li><strong>72 小时</strong>做策略评估</li>
+        <li>若连续 3 次评估性能下降 >5%，进入"策略重构"并通知工程人员</li>
+        <li>支持<strong>联邦学习</strong>：多殖民点局部模型可上传梯度汇总到中央模型</li>
+      </ul>
+
+      <h3>4）水循环流程</h3>
+      <table>
+        <tr><th>用水类型</th><th>优先级</th><th>来源</th><th>回收比例</th><th>AI监控变量</th></tr>
+        <tr><td>饮用水</td><td>★★★★★</td><td>融冰 + 纯化水</td><td>95%</td><td>水质、余量</td></tr>
+        <tr><td>农业灌溉</td><td>★★★★</td><td>回收水</td><td>80%</td><td>湿度、作物需求</td></tr>
+        <tr><td>设备冷却</td><td>★★★</td><td>废水再利用</td><td>70%</td><td>温度、能耗</td></tr>
+      </table>
     </section>
 
-    <!-- 视频展示区 -->
     <section id="section3" class="video-section">
       <h2>🎬 火星水循环系统演示</h2>
       <div class="video-container">
@@ -400,55 +507,252 @@
     </section>
 
     <section id="section4">
-      <h2>三、水循环闭环构建与AI调控系统</h2>
-      <pre><code>火星冰层/大气 → (AI调度) → 原位取水 → 纯化储存 → 生活/农业/设备用水 →
-废水收集 → 多级净化(过滤+膜分离+紫外消毒) → 再利用(AI分配) → 闭环</code></pre>
+      <h2>三、功能舱集成（详化）</h2>
+      
+      <p><strong>目标</strong>：定义具体舱室、接口、数据协议、协作流程与备份方案，确保 AI 与其他舱室协同工作。</p>
 
-      <h3>（2）AI动态分配逻辑</h3>
-      <table>
-        <tr><th>用水类型</th><th>优先级</th><th>来源</th><th>回收比例</th><th>AI监控变量</th></tr>
-        <tr><td>饮用水</td><td>★★★★★</td><td>融冰 + 纯化水</td><td>95%</td><td>水质、余量</td></tr>
-        <tr><td>农业灌溉</td><td>★★★★</td><td>回收水</td><td>80%</td><td>湿度、作物需求</td></tr>
-        <tr><td>设备冷却</td><td>★★★</td><td>废水再利用</td><td>70%</td><td>温度、能耗</td></tr>
-      </table>
+      <h3>1）主要实施舱室（功能与部署）</h3>
+      
+      <div class="highlight-box">
+        <h4>🌊 水处理舱（主控）</h4>
+        <ul>
+          <li><strong>部署</strong>：AI-WM Core + FWR-5 净化 + IMU-3 融冰接口</li>
+          <li><strong>功能</strong>：原位取水控制、净化流程执行、主站数据汇总</li>
+        </ul>
+      </div>
+
+      <h4>⚡ 能源舱</h4>
+      <ul>
+        <li><strong>部署</strong>：功率预测子系统、储能管理（电池/热能储存）</li>
+        <li><strong>功能</strong>：提供实时功率供给曲线、计划充放电策略</li>
+      </ul>
+
+      <h4>🌱 农业舱</h4>
+      <ul>
+        <li><strong>部署</strong>：土壤湿度、蒸腾传感器、作物模型接口</li>
+        <li><strong>功能</strong>：提供需水曲线、优先灌溉窗口与可接受水质等级</li>
+      </ul>
+
+      <h4>🏠 居住舱</h4>
+      <p>提供用水行为模式与突发人数变更事件（如访客、医疗事件）。</p>
+
+      <h4>🔬 实验舱</h4>
+      <p>离线与在线水质样本检测、设备性能测试与材料试验（如MOF材料老化）。</p>
+
+      <h3>2）跨舱联动（接口与协作流程）</h3>
+      
+      <h4>数据接口规范</h4>
+      <ul>
+        <li>采用 <strong>MQTT</strong> 或 <strong>gRPC</strong> 做轻量化时序数据传输</li>
+        <li><strong>RESTful API</strong> 提供查询/控制接口</li>
+        <li>数据格式采用 <strong>JSON+时间戳</strong>，严格约束字段与单位</li>
+      </ul>
+
+      <h4>协作示例流程（夜间高能耗任务）</h4>
+      <ol>
+        <li>AI-WM 预测夜间融冰需要额外 60 kWh，总需耗时 6 小时</li>
+        <li>AI-WM 向能源舱提出请求，能源舱回传可用储能容量与放电计划</li>
+        <li>若满足，AI-WM 安排融冰 3 台轮流工作并设置优先级</li>
+        <li>否则 AI-WM 调整策略，改为提升净化强度回收更多废水以补偿</li>
+        <li>执行后两舱上报实际功耗与产水，AI 用回传数据更新模型</li>
+      </ol>
+
+      <h4>容错与降级</h4>
+      <p>若能源舱出现临界警报（储能 < X%），AI-WM 自动进入<strong>节能模式</strong>并按优先级限制灌溉与非关键冷却。</p>
+
+      <h3>3）维护、备件与运营规划</h3>
+      <ul>
+        <li><strong>冗余</strong>：关键设备建议 N+1 备份（至少一台备用融冰机/净化模块）</li>
+        <li><strong>备件清单</strong>：膜组件×4、泵×6、传感器×若干、关键电子件×2 套/设备</li>
+        <li><strong>维护周期</strong>：膜更换周期估计 6–12 个月；泵检修 6 个月例检</li>
+        <li><strong>消耗物资补给</strong>：化学试剂、膜过滤剂与 MOF 材料需储备 12 个月量</li>
+      </ul>
     </section>
 
     <section id="section5">
-      <h2>四、跨组协作与效率优化</h2>
+      <h2>四、数据与传感器清单</h2>
+      
+      <table>
+        <tr><th>传感器类型</th><th>数量</th><th>精度/规格</th><th>采样频率</th></tr>
+        <tr><td>水位传感器</td><td>4</td><td>±0.5%</td><td>1 Hz</td></tr>
+        <tr><td>在线水质分析仪</td><td>3</td><td>pH/导电率/TOC/UV254</td><td>每5-15分钟</td></tr>
+        <tr><td>流量计与压差计</td><td>8</td><td>主要管路监测</td><td>1 Hz</td></tr>
+        <tr><td>能耗表</td><td>按设备数</td><td>模块化计量</td><td>实时</td></tr>
+        <tr><td>环境感知传感器</td><td>6</td><td>温度/湿度/风速/辐照</td><td>0.2 Hz</td></tr>
+      </table>
+
+      <h3>数据存储策略</h3>
       <ul>
-        <li>大气集水器能耗：<strong>0.8 kWh/L</strong>；融冰装置：<strong>1.5 kWh/L</strong>；</li>
-        <li>AI在高峰电力时段调节取水节奏，昼取夜融；</li>
-        <li>实时调整能耗与产水匹配，目标 <strong>水利用率 ≥ 85%</strong>。</li>
+        <li>高频传感器数据：<strong>1 Hz 采样</strong></li>
+        <li>关键水质数据：<strong>每 5–15 分钟</strong></li>
+        <li>历史压缩存档：<strong>保存 1 年</strong></li>
+        <li>在线数据库：支持时序查询（InfluxDB/Timescale 风格）</li>
       </ul>
     </section>
 
     <section id="section6">
-      <h2>五、AI控制核心逻辑</h2>
-      <pre><code>传感器监测(水量/温度/能耗)
-     ↓
-AI数据分析与预测
-     ↓
-智能调度(取水+净化+分配)
-     ↓
-执行与反馈 → 模型自学习优化</code></pre>
-    </section>
+      <h2>五、预期效果（量化）</h2>
+      
+      <div class="highlight-box">
+        <h3>🎯 关键绩效指标（KPI）</h3>
+        <table>
+          <tr><th>指标</th><th>目标值</th><th>备注</th></tr>
+          <tr><td>总水资源利用率</td><td>≥ 87%</td><td>(本地取水 + 回收水) / 需求</td></tr>
+          <tr><td>单位产水能耗</td><td>≤ 1.2 kWh/L</td><td>通过智能错峰优化</td></tr>
+          <tr><td>饮用水可用性</td><td>100%</td><td>优先保证级别</td></tr>
+          <tr><td>预测误差 (MAE)</td><td>≤ 5%</td><td>24h 产水量预测</td></tr>
+          <tr><td>平均检修间隔</td><td>≥ 6000 小时</td><td>关键泵 MTBF</td></tr>
+        </table>
+      </div>
 
-    <section id="section7">
-      <h2>六、成果总结与展望</h2>
-      <p>AI水循环系统通过闭环设计，实现火星殖民地的自给自足用水管理：</p>
+      <h3>预期优势</h3>
       <ul>
-        <li>能耗预测与调控；</li>
-        <li>用水优先级管理；</li>
-        <li>资源利用率超过85%；</li>
-        <li>具备未来自适应与跨基地调度潜力。</li>
+        <li><strong>能耗优化</strong>：比单纯人工调度下降约 <strong>15%–25%</strong>（通过智能错峰、模型优化）</li>
+        <li><strong>系统鲁棒性</strong>：常见故障下（单设备失效）能保证 ≥ 72 小时自供能力</li>
+        <li><strong>学习效应</strong>：模型部署后 3 个月内累积运行数据可使预测误差下降 10%–20%</li>
+        <li><strong>自适应能力</strong>：应对季节变化、设备退化、突发用水需求</li>
+      </ul>
+
+      <h3>仿真与测试计划</h3>
+      <ul>
+        <li><strong>阶段 A（室内仿真）</strong>：用数字孪生模拟多种气候与故障组合训练 RL 策略 2–4 周</li>
+        <li><strong>阶段 B（封闭环境测试）</strong>：在地面模拟室内运行 30 天，采集真实传感数据微调模型</li>
+        <li><strong>阶段 C（部署试运行）</strong>：在火星基地先行单模块运行 3 个月，逐步放开控制权给 AI</li>
       </ul>
     </section>
 
+    <section id="section7">
+      <h2>六、备用方案（扩展）</h2>
+      
+      <h3>🚨 极限节水模式</h3>
+      <p><strong>触发条件</strong>：储水 < 30% 或取水产能 < 50%</p>
+      <ul>
+        <li>停止一切非必需灌溉与设备冷却</li>
+        <li>将所有回收水优先供饮用与医疗</li>
+        <li>启动应急储备水源</li>
+      </ul>
+
+      <h3>👤 人工接管模式</h3>
+      <p><strong>触发条件</strong>：当 AI 置信度低于阈值或连续 N 次建议被人工拒绝时</p>
+      <ul>
+        <li>AI 自动退位为建议模式</li>
+        <li>操作权回到工程团队</li>
+        <li>保留数据记录与审计功能</li>
+      </ul>
+
+      <h3>🔄 外部补给模式</h3>
+      <ul>
+        <li>与邻近模块或后续补给任务协商短期水量转移</li>
+        <li>使用备用移动采冰机器人/运输模块（IMU-B）进行机械取水</li>
+        <li>启动应急水源储备（预设 72 小时备用水）</li>
+      </ul>
+
+      <h3>🛡️ 安全与人机协作原则</h3>
+      <ul>
+        <li><strong>人类在环（Human-in-the-loop）</strong>：AI 输出建议但关键阈值与极端操作需人工确认</li>
+        <li><strong>Fail-safe 策略</strong>：当模型不确定度低于阈值时自动降级为保守规则集</li>
+        <li><strong>日志与审计</strong>：所有 AI 决策记录并可溯源（用于回溯与审计）</li>
+      </ul>
+    </section>
+
+    <section id="section8">
+      <h2>七、技术路线与取水方案</h2>
+      
+      <h3>火星原位取水技术对比</h3>
+      <table>
+        <tr><th>技术方案</th><th>能耗</th><th>产水率</th><th>适用场景</th></tr>
+        <tr><td>融冰取水（加热法）</td><td>1.5 kWh/L</td><td>高</td><td>地下冰层丰富区域</td></tr>
+        <tr><td>大气冷凝取水</td><td>0.8 kWh/L</td><td>中低</td><td>昼夜温差大的区域</td></tr>
+        <tr><td>MOF材料吸附</td><td>1.0 kWh/L</td><td>中</td><td>低温环境补充方案</td></tr>
+      </table>
+
+      <h3>AI 优化策略</h3>
+      <ul>
+        <li><strong>白天</strong>：气温高、电力充足 → 优先运行冷凝系统</li>
+        <li><strong>夜间</strong>：利用低谷电力 → 启动融冰加热器储水</li>
+        <li><strong>动态调度</strong>：预测模型调整储水与能耗比例，实现动态平衡</li>
+        <li><strong>设备协同</strong>：多台设备轮流工作，降低单机负荷延长寿命</li>
+      </ul>
+    </section>
+
+    <section id="section8">
+      <div class="references">
+        <h3>📚 参考文献与资源</h3>
+        <ol>
+          <li>
+            <strong>NASA Phoenix Mission (2008)</strong> — Discovery of water ice at Martian arctic<br>
+            <a href="https://phoenix.lpl.arizona.edu/" target="_blank">https://phoenix.lpl.arizona.edu/</a>
+          </li>
+          <li>
+            <strong>NASA In-Situ Resource Utilization (ISRU)</strong> — Mars water extraction studies<br>
+            <a href="https://www.nasa.gov/isru" target="_blank">https://www.nasa.gov/isru</a>
+          </li>
+          <li>
+            <strong>ESA MELiSSA Project</strong> — Micro-Ecological Life Support System Alternative<br>
+            <a href="https://www.esa.int/Enabling_Support/Space_Engineering_Technology/Melissa" target="_blank">https://www.esa.int/Enabling_Support/Space_Engineering_Technology/Melissa</a>
+          </li>
+          <li>
+            <strong>NASA ECLSS Documentation</strong> — Environment Control and Life Support Systems<br>
+            <a href="https://www.nasa.gov/content/life-support-systems" target="_blank">https://www.nasa.gov/content/life-support-systems</a>
+          </li>
+          <li>
+            <strong>Yaghi, O. M., et al.</strong> — "Metal-Organic Frameworks for Atmospheric Water Harvesting"<br>
+            <em>Science</em>, multiple publications on MOF-based water capture (2014-2019)
+          </li>
+          <li>
+            <strong>JPL Technical Reports</strong> — "Water Recovery and Management for Mars Habitats"<br>
+            <a href="https://www.jpl.nasa.gov/" target="_blank">https://www.jpl.nasa.gov/</a>
+          </li>
+          <li>
+            <strong>Mars Water In-Situ Resource Utilization (ISRU)</strong> — NASA Technology Roadmap<br>
+            <a href="https://www.nasa.gov/directorates/spacetech/game_changing_development/ISRU" target="_blank">https://www.nasa.gov/directorates/spacetech/game_changing_development/ISRU</a>
+          </li>
+          <li>
+            <strong>Reinforcement Learning for Resource Scheduling</strong> — Recent survey papers on RL applications in space systems<br>
+            <em>IEEE Transactions on Aerospace and Electronic Systems</em>
+          </li>
+          <li>
+            <strong>Membrane Technology for Closed-Loop Systems</strong> — Review of RO/NF in space environments<br>
+            <em>Journal of Membrane Science</em>, various publications
+          </li>
+          <li>
+            <strong>RAMS Handbook</strong> — Reliability, Availability, Maintainability, and Safety for space systems<br>
+            NASA technical standards and guidelines
+          </li>
+        </ol>
+      </div>
+    </section>
+
     <footer>
-      <p>© 2025 AI星际拓荒项目学习 | 火星水循环AI管理小组</p>
+      <p>© 2025 AI星际拓荒项目学习 | 火星水循环AI管理小组 (AI Water Management Team)</p>
+      <p style="margin-top: 10px; font-size: 0.9em;">构建可持续的火星水资源管理系统</p>
     </footer>
 
     <button class="nav-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
   </div>
+
+  <script>
+    // 侧边栏激活状态
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.side-nav a');
+    
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollY >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
